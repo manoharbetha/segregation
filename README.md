@@ -131,6 +131,23 @@ FastAPI also gives automatic API documentation at:
 http://127.0.0.1:8000/docs
 ```
 
+## Deploying on Render
+
+Render's default Python version can be newer than TensorFlow supports. This project includes a `.python-version` file pinned to Python `3.11.9` so TensorFlow installs correctly during deployment.
+
+Create a Render **Web Service** from this GitHub repository and use:
+
+```text
+Build Command: pip install -r requirements.txt
+Start Command: uvicorn backend.app:app --host 0.0.0.0 --port $PORT
+```
+
+After deployment, open your Render URL. The API docs will be available at:
+
+```text
+https://your-render-service.onrender.com/docs
+```
+
 ## API Endpoint
 
 ### `POST /api/segregate`
