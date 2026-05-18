@@ -1,0 +1,31 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Local runtime output
+server.log
+server.out.log
+server.err.log
+*.log
+
+# Uploaded/runtime images
+backend/uploads/
+!backend/uploads/.gitkeep
+
+# Large local training dataset
+waste_dataset/
+
+# OS/editor files
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/

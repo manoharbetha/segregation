@@ -1,0 +1,197 @@
+:root{
+  --green-600:#16a34a;
+  --green-700:#15803d;
+  --bg:#f9fff9;
+  --white:#ffffff;
+
+  /* Non-green colors for results */
+  --amber-500:#FFB020;
+  --amber-600:#f59e0b;
+  --blue-600:#2563EB;
+  --blue-700:#1d4ed8;
+  --purple-600:#7C3AED;
+  --purple-700:#6d28d9;
+
+  --shadow:rgba(0,0,0,0.08);
+}
+
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);font-family:Inter,Arial;color:var(--green-700)}
+
+.app{display:flex;min-height:100vh}
+
+/* LEFT SIDEBAR CENTERED */
+.sidebar{
+  width:300px;
+  background:linear-gradient(180deg,var(--green-600),var(--green-700));
+  color:white;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  text-align:center;
+  padding:30px;
+}
+.sidebar-title{
+  font-size:30px;
+  font-weight:800;
+  line-height:1.1;
+}
+
+/* MAIN */
+.main{flex:1;padding:40px}
+
+/* UPLOAD CARD */
+.upload-card{
+  background:white;
+  padding:24px;
+  border-radius:14px;
+  max-width:850px;
+  box-shadow:0 8px 24px var(--shadow);
+  border:1px solid rgba(0,0,0,0.04);
+}
+.upload-title{font-size:22px;margin:0}
+.upload-sub{margin-top:4px;color:#486b4b}
+
+/* Upload layout */
+.upload-area{
+  margin-top:14px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:16px;
+}
+
+/* ---------------- IMAGE PREVIEW FIX (REPLACE OLD PREVIEW CSS WITH THIS) ---------------- */
+
+.preview-box {
+    width: 320px;
+    height: 240px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px;
+    background: #fbfff9; /* soft off-white */
+    border-radius: 12px;
+    border: 2px dashed rgba(21, 128, 61, 0.25); /* subtle green border */
+    overflow: hidden;
+    position: relative;
+}
+
+/* start hidden — JS fades this in */
+#image-preview {
+    max-width: 100%;
+    max-height: 220px;
+    display: none;          /* IMPORTANT */
+    opacity: 0;             /* IMPORTANT */
+    border-radius: 10px;
+    object-fit: contain;
+    transition: opacity 0.35s ease; /* fade-in */
+}
+
+/* class added when image is loaded */
+.img-fade {
+    display: block !important;
+    opacity: 1 !important;
+}
+
+/* placeholder text */
+#preview-placeholder {
+    display: block;
+    color: #6b8c6e;
+    font-weight: 600;
+    font-size: 0.95rem;
+    text-align: center;
+}
+
+/* Buttons */
+.btn{
+  padding:10px 14px;
+  font-weight:700;
+  border-radius:10px;
+  cursor:pointer;
+  border:none;
+  width:320px;
+}
+.btn-ghost{
+  background:white;
+  border:2px solid rgba(21,128,61,0.18);
+  color:var(--green-700);
+}
+.btn-primary{
+  background:linear-gradient(90deg,var(--green-600),var(--green-700));
+  color:white;
+}
+
+/* Spinner */
+.spinner{
+  width:28px;height:28px;border-radius:50%;
+  border:4px solid rgba(0,0,0,0.05);
+  border-top-color:var(--green-700);
+  animation:spin 1s linear infinite;
+}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* RESULTS CARD */
+.results-card{
+  background:white;
+  border-radius:14px;
+  margin-top:24px;
+  padding:20px;
+  box-shadow:0 8px 24px var(--shadow);
+  border:1px solid rgba(0,0,0,0.04);
+}
+.results-title{margin:0 0 14px 0}
+
+/* result cards */
+.cards{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:14px;
+}
+
+.card{
+  background:white;
+  padding:14px;
+  border-radius:12px;
+  box-shadow:0 4px 10px rgba(0,0,0,0.05);
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+}
+.card-head{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+.card-head h3{margin:0;font-size:17px;font-weight:700}
+.percent{font-size:20px;font-weight:800}
+
+.progress{
+  height:12px;
+  background:#e6e6e6;
+  border-radius:10px;
+  overflow:hidden;
+}
+.progress-inner{
+  height:100%;
+  width:0%;
+  transition:width .7s ease;
+}
+
+/* Amber */
+.card-amber .percent,
+.card-amber h3{color:var(--amber-600)}
+.card-amber .progress-inner{background:var(--amber-500)}
+
+/* Blue */
+.card-blue .percent,
+.card-blue h3{color:var(--blue-700)}
+.card-blue .progress-inner{background:var(--blue-600)}
+
+/* Purple */
+.card-purple .percent,
+.card-purple h3{color:var(--purple-700)}
+.card-purple .progress-inner{background:var(--purple-600)}
+
+.card-foot{font-size:13px;color:#666}
+.hidden{display:none}

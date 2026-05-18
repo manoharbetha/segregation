@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Smart Waste Segregation</title>
+  <link rel="stylesheet" href="styles.css"/>
+</head>
+<body>
+  <div class="app">
+    <!-- LEFT SIDEBAR -->
+    <aside class="sidebar">
+      <h1 class="sidebar-title">Smart Waste<br>Segregation</h1>
+    </aside>
+
+    <!-- RIGHT MAIN -->
+    <main class="main">
+      <section class="upload-card">
+        <h2 class="upload-title">Upload an image</h2>
+        <p class="upload-sub">Choose a photo of the waste item and click <strong>Classify</strong>.</p>
+
+        <div class="upload-area">
+          <input id="waste-image-input" type="file" accept="image/*" hidden />
+          <button id="choose-btn" class="btn btn-ghost">Choose Image</button>
+
+          <div class="preview-box">
+            <img id="image-preview" src="" class="img-fade hidden" />
+            <div id="preview-placeholder">No image selected</div>
+          </div>
+
+          <button id="classify-button" class="btn btn-primary" disabled>Classify</button>
+
+          <div id="status-row" class="status-row">
+            <div id="loading-spinner" class="spinner hidden"></div>
+            <p id="error-message" class="error-text hidden"></p>
+          </div>
+        </div>
+      </section>
+
+      <section id="results-section" class="results-card hidden">
+        <h2 class="results-title">Classification Results</h2>
+
+        <div class="cards">
+          <!-- BIO -->
+          <article class="card card-amber">
+            <div class="card-head">
+              <h3>Biodegradable</h3>
+              <div class="percent" id="pct-biodegradable">--%</div>
+            </div>
+            <div class="progress">
+              <div id="bar-biodegradable" class="progress-inner"></div>
+            </div>
+            <div class="card-foot" id="label-biodegradable">Confidence: --</div>
+          </article>
+
+          <!-- NON-BIO -->
+          <article class="card card-blue">
+            <div class="card-head">
+              <h3>Non-Biodegradable</h3>
+              <div class="percent" id="pct-non-biodegradable">--%</div>
+            </div>
+            <div class="progress">
+              <div id="bar-non-biodegradable" class="progress-inner"></div>
+            </div>
+            <div class="card-foot" id="label-non-biodegradable">Confidence: --</div>
+          </article>
+
+          <!-- E-WASTE -->
+          <article class="card card-purple">
+            <div class="card-head">
+              <h3>E-Waste</h3>
+              <div class="percent" id="pct-e-waste">--%</div>
+            </div>
+            <div class="progress">
+              <div id="bar-e-waste" class="progress-inner"></div>
+            </div>
+            <div class="card-foot" id="label-e-waste">Confidence: --</div>
+          </article>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
