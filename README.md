@@ -12,6 +12,8 @@ The project uses a TensorFlow/Keras image classification model with a FastAPI ba
 
 This project helps automate basic waste segregation using image classification. It can be used as a prototype for smart bins, recycling awareness tools, or waste sorting assistance systems.
 
+For a complete interview explanation, code walkthrough, technology stack explanation, and common questions with answers, see [INTERVIEW_GUIDE.md](INTERVIEW_GUIDE.md).
+
 The application has three main parts:
 
 1. **Dataset**
