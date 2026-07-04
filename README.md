@@ -8,6 +8,12 @@ Smart Waste Segregation is an end-to-end image classification project that predi
 
 The project combines a lightweight FastAPI backend, a simple browser-based frontend, and a TensorFlow/Keras model built with MobileNetV2 transfer learning.
 
+## Accuracy Summary
+
+- Previous observed validation accuracy: `92.02%` (`3542 / 3849`)
+- Class-wise evaluation supported: precision, recall, F1-score, confusion matrix
+- Fresh retraining required for a new verified score because the dataset is not included in the repo
+
 ## Highlights
 
 - Three-class waste image classification
