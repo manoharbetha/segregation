@@ -1,4 +1,5 @@
 import os
+import json
 from contextlib import asynccontextmanager
 from io import BytesIO
 from pathlib import Path
@@ -9,6 +10,7 @@ from fastapi import FastAPI, File, HTTPException, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse, JSONResponse
 from PIL import Image
+from tensorflow.keras.applications.mobilenet_v2 import preprocess_input
 from tensorflow.keras.models import load_model
 
 
@@ -19,6 +21,7 @@ BASE_DIR = Path(__file__).resolve().parent
 FRONTEND_DIR = BASE_DIR.parent / "frontend"
 DEFAULT_MODEL_PATH = BASE_DIR / "saved_model" / "waste_classifier.h5"
 MODEL_PATH = Path(os.environ.get("WASTE_MODEL_PATH", DEFAULT_MODEL_PATH))
+METADATA_PATH = MODEL_PATH.with_name("model_metadata.json")
 
 IMAGE_SIZE = (224, 224)
 UPLOAD_FOLDER = BASE_DIR / "uploads"
@@ -26,6 +29,7 @@ UPLOAD_FOLDER.mkdir(exist_ok=True)
 
 # Class names must match the order used when the model was trained.
 WASTE_CLASSES = ["Biodegradable", "E-Waste", "Non-Biodegradable"]
+PREPROCESSING_MODE = "legacy_rescale"
 
 model = None
 
@@ -35,12 +39,20 @@ model = None
 # --------------------
 def load_ml_model():
     """Load the trained Keras model into memory once when the API starts."""
-    global model
+    global model, WASTE_CLASSES, IMAGE_SIZE, PREPROCESSING_MODE
     try:
+        if METADATA_PATH.exists():
+            metadata = json.loads(METADATA_PATH.read_text(encoding="utf-8"))
+            WASTE_CLASSES = metadata.get("class_names", WASTE_CLASSES)
+            IMAGE_SIZE = tuple(metadata.get("image_size", IMAGE_SIZE))
+            PREPROCESSING_MODE = metadata.get("preprocessing", PREPROCESSING_MODE)
+
         if not MODEL_PATH.exists():
             raise FileNotFoundError(f"Model not found at: {MODEL_PATH}")
         model = load_model(MODEL_PATH, compile=False)
         print(f"Model loaded successfully from: {MODEL_PATH}")
+        print(f"Classes: {WASTE_CLASSES}")
+        print(f"Preprocessing: {PREPROCESSING_MODE}")
     except Exception as exc:
         print(f"Could not load model: {exc}")
         model = None
@@ -56,7 +68,13 @@ def preprocess_image(image_bytes: bytes) -> np.ndarray:
     """Convert uploaded image bytes into a model-ready array."""
     img = Image.open(BytesIO(image_bytes)).convert("RGB")
     img = img.resize(IMAGE_SIZE)
-    img_array = np.array(img).astype("float32") / 255.0
+    img_array = np.array(img).astype("float32")
+
+    if PREPROCESSING_MODE == "mobilenet_v2.preprocess_input":
+        img_array = preprocess_input(img_array)
+    else:
+        img_array = img_array / 255.0
+
     return np.expand_dims(img_array, axis=0)
 
 

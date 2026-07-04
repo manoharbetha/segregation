@@ -1,169 +1,67 @@
 # Smart Waste Segregation
 
-Smart Waste Segregation is a machine learning web application that classifies a waste item image into one of three categories:
+Smart Waste Segregation is an end-to-end image classification project that predicts whether an uploaded waste item belongs to one of three categories:
 
-- Biodegradable
-- Non-Biodegradable
-- E-Waste
+- `Biodegradable`
+- `Non-Biodegradable`
+- `E-Waste`
 
-The project uses a TensorFlow/Keras image classification model with a FastAPI backend and a simple HTML/CSS/JavaScript frontend. A user uploads an image, clicks **Classify**, and the app returns confidence scores for each waste category.
+The project combines a lightweight FastAPI backend, a simple browser-based frontend, and a TensorFlow/Keras model built with MobileNetV2 transfer learning.
 
-## Project Overview
+## Highlights
 
-This project helps automate basic waste segregation using image classification. It can be used as a prototype for smart bins, recycling awareness tools, or waste sorting assistance systems.
+- Three-class waste image classification
+- FastAPI inference API with file upload support
+- HTML, CSS, and JavaScript frontend
+- MobileNetV2-based transfer learning pipeline
+- Saved production model included in the repository
+- Retraining pipeline with class-wise evaluation output
 
-For a complete interview explanation, code walkthrough, technology stack explanation, and common questions with answers, see [INTERVIEW_GUIDE.md](INTERVIEW_GUIDE.md).
+## Tech Stack
 
-The application has three main parts:
+- `Python`
+- `FastAPI`
+- `Uvicorn`
+- `TensorFlow / Keras`
+- `MobileNetV2`
+- `NumPy`
+- `Pillow`
+- `scikit-learn`
+- `HTML`
+- `CSS`
+- `JavaScript`
 
-1. **Dataset**
-   - Training images should be stored locally inside `waste_dataset/`.
-   - The dataset is divided into class folders:
-     - `Biodegradable`
-     - `E-waste`
-     - `Non-Biodegradable`
-   - The dataset folder is ignored by Git because it is large. Add it locally before retraining.
-
-2. **Training Script**
-   - `train_model.py` trains a MobileNetV2-based image classifier.
-   - It uses transfer learning, data augmentation, class weights, early stopping, and fine-tuning.
-   - The trained model is saved as `backend/saved_model/waste_classifier.h5`.
-
-3. **FastAPI Web Application**
-   - `backend/app.py` runs the FastAPI application.
-   - The frontend is served from the `frontend/` folder.
-   - Users upload an image through the browser.
-   - The backend preprocesses the image, predicts its waste category, and sends JSON results back to the frontend.
-
-## Folder Structure
+## Project Structure
 
 ```text
-Smart_Waste_Seggregation-main/
-├── backend/
-│   ├── app.py
-│   ├── saved_model/
-│   │   └── waste_classifier.h5
-│   └── uploads/
-├── frontend/
-│   ├── index.html
-│   ├── script.js
-│   └── styles.css
-├── waste_dataset/
-│   ├── Biodegradable/
-│   ├── E-waste/
-│   └── Non-Biodegradable/
-├── requirements.txt
-├── run_server.ps1
-├── train_model.py
-└── README.md
+segregation/
+|-- backend/
+|   |-- app.py
+|   |-- __init__.py
+|   `-- saved_model/
+|       `-- waste_classifier.h5
+|-- frontend/
+|   |-- index.html
+|   |-- script.js
+|   `-- styles.css
+|-- INTERVIEW_GUIDE.md
+|-- README.md
+|-- requirements.txt
+|-- run_server.ps1
+`-- train_model.py
 ```
-
-## Technologies Used
-
-- Python
-- FastAPI
-- Uvicorn
-- TensorFlow / Keras
-- MobileNetV2
-- NumPy
-- Pillow
-- scikit-learn
-- HTML
-- CSS
-- JavaScript
 
 ## How It Works
 
-1. The user opens the web page.
-2. The user selects an image of a waste item.
-3. The frontend previews the selected image.
-4. When the user clicks **Classify**, the image is sent to the FastAPI endpoint.
-5. The backend:
-   - reads the uploaded image,
-   - saves a copy in `backend/uploads/`,
-   - resizes it to `224 x 224`,
-   - normalizes pixel values,
-   - passes it to the trained Keras model,
-   - calculates confidence scores.
-6. The frontend displays the confidence percentage for each category.
+1. A user uploads a waste image from the web interface.
+2. The frontend sends the image to `POST /api/segregate`.
+3. The backend preprocesses the image and runs model inference.
+4. The API returns the predicted class and probabilities for all three categories.
+5. The frontend displays the result and confidence breakdown.
 
-## Installation
+## API Response
 
-Create and activate a Python virtual environment:
-
-```bash
-python -m venv .venv
-```
-
-On Windows:
-
-```bash
-.\.venv\Scripts\activate
-```
-
-On macOS/Linux:
-
-```bash
-source .venv/bin/activate
-```
-
-Install the required packages:
-
-```bash
-pip install -r requirements.txt
-```
-
-## Running the Application
-
-From the project root, run:
-
-```bash
-uvicorn backend.app:app --host 127.0.0.1 --port 8000 --reload
-```
-
-Then open this URL in your browser:
-
-```text
-http://127.0.0.1:8000
-```
-
-FastAPI also gives automatic API documentation at:
-
-```text
-http://127.0.0.1:8000/docs
-```
-
-## Deploying on Render
-
-Render's default Python version can be newer than TensorFlow supports. This project includes a `.python-version` file pinned to Python `3.11.9` so TensorFlow installs correctly during deployment.
-
-Create a Render **Web Service** from this GitHub repository and use:
-
-```text
-Build Command: pip install -r requirements.txt
-Start Command: uvicorn backend.app:app --host 0.0.0.0 --port $PORT
-```
-
-After deployment, open your Render URL. The API docs will be available at:
-
-```text
-https://your-render-service.onrender.com/docs
-```
-
-## API Endpoint
-
-### `POST /api/segregate`
-
-Accepts an image file and returns the predicted waste category with confidence values.
-
-Request format:
-
-```text
-multipart/form-data
-file: uploaded image
-```
-
-Example response:
+Example response from `POST /api/segregate`:
 
 ```json
 {
@@ -189,15 +87,55 @@ Example response:
 }
 ```
 
-## Training the Model
+## Run Locally
 
-To retrain the model, make sure the dataset is available in this format:
+Create and activate a virtual environment:
+
+```bash
+python -m venv .venv
+```
+
+On Windows:
+
+```bash
+.\.venv\Scripts\activate
+```
+
+Install dependencies:
+
+```bash
+pip install -r requirements.txt
+```
+
+Start the app:
+
+```bash
+uvicorn backend.app:app --host 127.0.0.1 --port 8000 --reload
+```
+
+Then open:
+
+```text
+http://127.0.0.1:8000
+```
+
+API docs:
+
+```text
+http://127.0.0.1:8000/docs
+```
+
+## Model Training
+
+The repository includes the trained model file, but the original dataset is intentionally excluded from Git.
+
+To retrain the classifier, add your local dataset in this format:
 
 ```text
 waste_dataset/
-├── Biodegradable/
-├── E-waste/
-└── Non-Biodegradable/
+|-- Biodegradable/
+|-- E-waste/
+`-- Non-Biodegradable/
 ```
 
 Then run:
@@ -206,78 +144,79 @@ Then run:
 python train_model.py
 ```
 
-The training script performs two stages:
+The training script uses:
 
-1. **Feature extraction**
-   - MobileNetV2 base layers are frozen.
-   - Only the custom classifier layers are trained.
+- MobileNetV2 transfer learning
+- data augmentation for training images
+- clean validation evaluation without random augmentation
+- class weights for imbalanced classes
+- early stopping
+- learning rate reduction
+- fine-tuning of the top MobileNetV2 layers
 
-2. **Fine-tuning**
-   - The last 40 layers of MobileNetV2 are unfrozen.
-   - The model is trained with a lower learning rate.
+## Accuracy And Evaluation
 
-After training, the model is saved here:
+The current repository does not include the dataset, so a fresh accuracy number cannot be reproduced directly from GitHub alone.
+
+After retraining with the local dataset, the script saves:
 
 ```text
-backend/saved_model/waste_classifier.h5
+backend/saved_model/model_metadata.json
+backend/saved_model/training_metrics.json
+backend/saved_model/training_log.csv
 ```
 
-## Model Details
+The evaluation checks:
 
-- Base model: MobileNetV2
-- Input image size: `224 x 224`
-- Output classes: 3
-- Loss function: categorical crossentropy
-- Optimizer: Adam
-- Data augmentation:
-  - rotation
-  - width shift
-  - height shift
-  - shear
-  - zoom
-  - horizontal flip
-  - brightness adjustment
+- validation accuracy
+- correct predictions out of total validation samples
+- precision for each class
+- recall for each class
+- F1-score for each class
+- confusion matrix
 
-## Why FastAPI?
+Accuracy is calculated as:
 
-FastAPI is a good fit because this project is API-focused. The frontend sends an image to the backend, and the backend returns JSON prediction data. FastAPI also provides:
+```text
+Accuracy = Correct Predictions / Total Validation Predictions
+```
 
-- automatic Swagger docs at `/docs`,
-- clean request handling for file uploads,
-- better type hints and validation,
-- easy CORS configuration,
-- simple deployment with Uvicorn or Gunicorn/Uvicorn workers.
+The improved evaluation flow in `train_model.py`:
 
-## Important Notes
+1. splits the dataset using `validation_split=0.2`
+2. trains the classifier head
+3. fine-tunes the top MobileNetV2 layers
+4. evaluates the model on the validation set
+5. generates class-wise metrics from validation predictions
+6. saves the final metrics in `training_metrics.json`
 
-- The class order in the backend must match the order used during model training.
-- Uploaded images are saved in `backend/uploads/`.
-- The current model file is expected at `backend/saved_model/waste_classifier.h5`.
-- If you move the model, set the `WASTE_MODEL_PATH` environment variable before running the server.
+## Deployment Note
 
-Windows example:
+The repository includes `.python-version` pinned to `3.11.9` to avoid TensorFlow compatibility issues during deployment on platforms such as Render.
 
-```bash
-set WASTE_MODEL_PATH=path\to\waste_classifier.h5
-uvicorn backend.app:app --host 127.0.0.1 --port 8000
+Suggested commands for Render:
+
+```text
+Build Command: pip install -r requirements.txt
+Start Command: uvicorn backend.app:app --host 0.0.0.0 --port $PORT
 ```
 
 ## Limitations
 
-- Prediction accuracy depends on the quality and balance of the dataset.
-- The model may misclassify images that are blurry, dark, cropped, or very different from the training data.
-- TensorFlow can make deployment heavier than a normal web API.
-- This is a prototype and should be tested further before real-world deployment.
+- accuracy depends heavily on dataset quality and class balance
+- the dataset is not bundled in the repository
+- the current app classifies one uploaded image at a time
+- real-world performance may drop for blurry, dark, or cluttered images
 
 ## Future Improvements
 
-- Add model accuracy and training charts.
-- Add drag-and-drop image upload.
-- Add camera capture support.
-- Store prediction history.
-- Improve dataset balance, especially for E-Waste images.
-- Add production deployment instructions.
+- add drag-and-drop upload
+- support camera capture
+- store prediction history
+- add Docker support
+- improve dataset balance for E-Waste
+- export confusion matrix visuals after training
 
-## Author
+## Interview Support
 
-Smart Waste Segregation project.
+For a detailed explanation of the architecture, training flow, technology choices, and interview questions, see [INTERVIEW_GUIDE.md](INTERVIEW_GUIDE.md).
