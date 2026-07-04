@@ -10,9 +10,13 @@ The project combines a lightweight FastAPI backend, a simple browser-based front
 
 ## Accuracy Summary
 
-- Previous observed validation accuracy: `92.02%` (`3542 / 3849`)
-- Class-wise evaluation supported: precision, recall, F1-score, confusion matrix
-- Fresh retraining required for a new verified score because the dataset is not included in the repo
+| Metric | Value |
+| --- | --- |
+| Previous observed validation accuracy | `92.02%` (`3542 / 3849`) |
+| Class-wise evaluation | Precision, recall, F1-score, confusion matrix |
+| Fresh verified score in this repo | Not available until the dataset is added and retraining is run |
+
+If you want to add a screenshot later, place it in the repo root or a `docs/` folder and link it here.
 
 ## Highlights
 
